@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CBM PoC Progress</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap">
+<style>
+html,body{margin:0;height:100%;background:#061725;overflow:hidden}
+body{font-family:'Manrope',Arial,sans-serif}
+#viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;background:#f7f9fb}
+.slide{position:absolute;inset:0}
+.slide[hidden]{display:none}
+.slide>section{position:absolute;left:0;top:0;width:1920px;height:1080px;box-sizing:border-box;margin:0;display:flex;flex-direction:column;overflow:hidden}
+.slide *{box-sizing:border-box}
+.slide h1,.slide h2,.slide h3,.slide p,.slide ul,.slide ol{margin:0}
+.slide h1{font-size:96px;font-weight:600;line-height:1.1}
+.slide h2{font-size:64px;font-weight:600;line-height:1.15}
+.slide h3{font-size:44px;font-weight:600;line-height:1.2}
+.slide p{font-size:32px;line-height:1.4}
+.slide div:not([style*="display"]){display:flex;flex-direction:column}
+.slide table{border-collapse:collapse;width:100%}
+.slide th,.slide td{padding:0.35em 0.6em;border-bottom:1px solid #d7dee5;text-align:left}
+.slide th{font-weight:700}
+.slide img,.slide video,.slide svg{display:block;flex:none}
+.slide video{background:#0a2a40}
+.slide aside{display:none}
+body.notes .slide:not([hidden]) aside{display:block;position:fixed;left:0;right:0;bottom:0;max-height:34vh;overflow:auto;
+  background:rgba(6,23,37,.94);color:#e8f1f7;font:16px/1.5 'Manrope',Arial,sans-serif;padding:14px 20px 56px;z-index:5}
+#ui{position:fixed;right:14px;bottom:12px;display:flex;gap:8px;align-items:center;z-index:10;padding:6px;border-radius:12px;
+  background:rgba(6,23,37,.82);font:600 14px/1 'Manrope',Arial,sans-serif;color:#e8f1f7;transition:opacity .3s}
+body.idle #ui,body.idle #help{opacity:0}
+#ui:hover{opacity:1}
+#ui button{font:inherit;color:#fff;background:#0e4765;border:0;border-radius:8px;padding:9px 13px;cursor:pointer}
+#ui button:focus-visible{outline:2px solid #7fdceb}
+#count{min-width:64px;text-align:center;font-variant-numeric:tabular-nums}
+.zone{position:fixed;top:0;bottom:0;width:18%;z-index:3;cursor:pointer}
+#zl{left:0}#zr{right:0}
+#help{position:fixed;left:14px;bottom:12px;font:13px/1.4 'Manrope',Arial,sans-serif;color:#e8f1f7;background:rgba(6,23,37,.82);padding:6px 10px;border-radius:10px;z-index:10;transition:opacity .3s}
+</style>
+</head>
+<body>
+<div id="viewport"><div id="stage">
+<div class="slide" data-id="cover" hidden>
+<section id="cover" data-transition="fade" style="background:#0e4765; color:#ffffff; font-family:'Manrope', Arial, sans-serif; padding:128px; display:flex; flex-direction:column; justify-content:space-between">
+  <div style="position:absolute; left:0; bottom:0; width:1920px; height:16px; background:linear-gradient(90deg, #12ace8, #0ab2bf, #0dcdab)"></div>
+  <img src="assets/f25f6033849ef3b39e6c6964787464a8.png" alt="tNavigator logo" style="width:332px; height:90px; object-fit:contain">
+  <div style="display:flex; flex-direction:column; gap:36px">
+    <p style="font-size:28px; font-weight:700; letter-spacing:4px; text-transform:uppercase; color:#7fdceb">Origin CBM proof of concept · progress</p>
+    <h1 style="font-size:96px; font-weight:800; letter-spacing:-2px; line-height:1.06; width:1600px">From the pumped CBM well to a network of thousands of wells</h1>
+    <p style="font-size:34px; line-height:1.4; color:#c9dfec; width:1440px">What has been built against the PoC offer: a wellbore model inside tNavigator, an asset-scale gas and water network, an AI agent that builds and calibrates models, and the UNSW proxy research track.</p>
+  </div>
+  <p style="font-size:26px; color:#c9dfec">Rock Flow Dynamics · tNavigator 26.2 · synthetic demo models · 28 September 2026</p>
+  <aside>Everything shown runs on synthetic demo models built by RFD in tNavigator, not on Origin data. The structure follows the PoC offer to Origin (July 2026): TC2 wellbore, TC3 integrated asset, TC4 asset-scale network, the AI layer, and TC6 proxy modelling with UNSW.</aside>
+</section>
+</div>
+<div class="slide" data-id="map" hidden>
+<section id="map" data-transition="fade" style="background:#f7f9fb; color:#0a2a40; font-family:'Manrope', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:40px">
+  <div style="position:absolute; left:0; top:0; width:1920px; height:12px; background:linear-gradient(90deg, #12ace8, #0ab2bf, #0dcdab)"></div>
+  <div style="display:flex; flex-direction:column; gap:16px">
+    <p style="font-size:26px; font-weight:700; letter-spacing:3.6px; text-transform:uppercase; color:#0b7fa8">The PoC offer and where we are</p>
+    <h2 style="font-size:60px; font-weight:800; letter-spacing:-1.2px; line-height:1.1">Four parts of the offer now run in tNavigator on demo models</h2>
+  </div>
+  <table style="font-size:26px; color:#0a2a40; font-family:'Manrope', Arial, sans-serif">
+    <tr><th style="width:26%; text-align:left">Offer</th><th style="width:52%; text-align:left">What is built</th><th style="width:22%; text-align:left">Status</th></tr>
+    <tr><td>TC2 · wellbore pressure gradient</td><td>Annulus water model coupled to the simulator and the network every time step</td><td>Working, 7 synthetic wells</td></tr>
+    <tr><td>TC3 · integrated asset modelling</td><td>Field gas target and well balancing on the integrated model; water held to plant capacity</td><td>Working, synthetic</td></tr>
+    <tr><td>TC4 · asset-scale scalability study</td><td>Scripted IPR networks of 7, 70, 700 and 7,000 wells, IPRs tied to the integrated model</td><td>Working to 700; 7,000 runs</td></tr>
+    <tr><td>AI layer (section 8)</td><td>An agent builds an integrated model and calibrates a well model through the tNavigator MCP server</td><td>Demonstrated</td></tr>
+    <tr><td>TC6 · proxy modelling (UNSW)</td><td>Graph neural network proof of concept; control-aware proxy proposal</td><td>Research started</td></tr>
+    <tr><td>TC1 · permeability closure + AHM, TC5 · hydraulic fracture</td><td>Need Origin data (TC1) and the section owner (TC5)</td><td>Not started</td></tr>
+  </table>
+  <p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#7a8b9b">Origin CBM PoC · tNavigator · RFD · all results on synthetic demo models</p>
+  <aside>Mapping to the PoC offer (July 2026). TC2: our annulus tank model replaces a static VFP for pumped CBM wells. TC3: the network controller and the water-limited optimisation are the facility-constrained part of the integrated model, shown on synthetic cases. TC4: the gas networks were built by script and run with 7 to 700 wells over one year; the 7,000-well case runs but takes hours per simulated year on one CPU. AI layer: RFD agent demos. TC6: UNSW update of 16 September 2026 and their problem statement. TC1 (Gangi closure and ensemble AHM) needs Origin pilot data; TC5 is reserved for its owner.</aside>
+</section>
+</div>
+<div class="slide" data-id="well" hidden>
+<section id="well" data-transition="fade" style="background:#f7f9fb; color:#0a2a40; font-family:'Manrope', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:28px">
+  <div style="position:absolute; left:0; top:0; width:1920px; height:12px; background:linear-gradient(90deg, #12ace8, #0ab2bf, #0dcdab)"></div>
+  <div style="display:flex; flex-direction:column; gap:16px">
+    <p style="font-size:26px; font-weight:700; letter-spacing:3.6px; text-transform:uppercase; color:#0b7fa8">1 · Wellbore (TC2)</p>
+    <h2 style="font-size:60px; font-weight:800; letter-spacing:-1.2px; line-height:1.1">The pumped CBM well: water up the tubing, gas up the annulus</h2>
+  </div>
+  <div style="display:flex; gap:40px; align-items:start">
+<svg viewBox="0 0 800 500" width="900" height="563" role="img" style="flex:none" font-family="Manrope, Arial, sans-serif" aria-label="CBM well cross-section: both gas and water enter from each coal seam. Green gas rises through the annulus; blue water drains to the PCP and rises inside the tubing. Arrows share one size and indicate flow direction, not rate."><title>CBM well cross-section: both gas and water enter from each coal seam. Green gas rises through the annulus; blue water drains to the PCP and rises inside the tubing. Arrows share one size and indicate flow direction, not rate.</title><style>.fa{fill:none;stroke-width:3.5;stroke-linecap:butt;stroke-linejoin:round}.fa.gas{stroke:#00877e;marker-end:url(#gas-arrow)}.fa.water{stroke:#2467cc;marker-end:url(#water-arrow)}</style><defs>
+      <marker id="gas-arrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="6" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#00877e"/></marker>
+      <marker id="water-arrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="6" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#2467cc"/></marker>
+      <pattern id="coal" width="14" height="10" patternUnits="userSpaceOnUse"><rect width="14" height="10" fill="#4d5660"/><path d="M0 8L14 2" stroke="#6b7580" stroke-width="1.3"/></pattern>
+      </defs>
+      <rect x="160" y="100" width="371" height="374" rx="7" fill="#edf0eb"/>
+      <text x="167" y="93" font-size="13" fill="#67796c">GROUND LEVEL</text>
+      <rect x="160" y="325" width="371" height="25" fill="url(#coal)"/>
+      <rect x="160" y="388" width="371" height="25" fill="url(#coal)"/>
+      <rect x="272" y="86" width="147" height="382" rx="8" fill="#bac6cc"/>
+      <rect x="282" y="88" width="127" height="369" fill="#d9f0ea"/>
+      <rect x="282" y="264" width="127" height="192" fill="#b8daf0"/>
+      <path d="M282 264Q295 251 307 264T333 264T359 264T385 264T409 264" fill="none" stroke="#2467cc" stroke-width="2" stroke-dasharray="4 3"/>
+      <rect x="326" y="74" width="39" height="358" rx="3" fill="#6e8f9f"/>
+      <rect x="333" y="75" width="25" height="358" fill="#c7defb"/>
+      <rect x="319" y="427" width="52" height="28" rx="6" fill="#255177"/>
+      <path d="M336 432Q354 436 336 441T351 450" fill="none" stroke="#b1d5f7" stroke-width="3"/>
+      <path class="fa gas" d="M303 150V82H505"/>
+      <rect x="510" y="53" width="77" height="70" rx="12" fill="#e7efef" stroke="#89a4a5" stroke-width="2"/>
+      <text x="548" y="78" text-anchor="middle" font-size="13" fill="#36545e">Wellhead</text>
+      <text x="548" y="96" text-anchor="middle" font-size="13" fill="#36545e">separator</text>
+      <path class="fa gas" d="M587 82H712"/>
+      <text x="608" y="60" font-size="15" fill="#00796f">Gas gathering</text>
+      <path class="fa water" d="M357 121H462V159H712"/>
+      <path class="fa water" d="M548 123V158"/>
+      <text x="594" y="185" font-size="15" fill="#2467cc">Water line</text>
+      <path class="fa gas" d="M303 226V166"/>
+      <path class="fa gas" d="M304 371V294"/>
+      <path class="fa gas" d="M388 356V290"/>
+      <path class="fa water" d="M310 343V414Q310 440 327 440"/>
+      <path class="fa water" d="M380 406V423Q380 441 366 442"/>
+      <path class="fa water" d="M351 408V334"/>
+      <path class="fa water" d="M351 304V224"/>
+      <path class="fa water" d="M351 204V131"/>
+      <path class="fa gas" d="M222 331H294"/>
+      <path class="fa water" d="M222 343H294"/>
+      <path class="fa gas" d="M466 394H392"/>
+      <path class="fa water" d="M466 406H392"/>
+      <g fill="#e9f8f5" stroke="#4bafaa" stroke-width="1.2"><circle cx="290" cy="280" r="4"/><circle cx="316" cy="294" r="4"/><circle cx="291" cy="313" r="3"/><circle cx="398" cy="278" r="4"/><circle cx="375" cy="316" r="5"/><circle cx="289" cy="361" r="4"/><circle cx="292" cy="393" r="4"/><circle cx="400" cy="370" r="4"/><circle cx="396" cy="429" r="4"/><circle cx="290" cy="421" r="4"/></g><g stroke="#80939e" stroke-width="1.2" fill="none">
+      <path d="M178 179H224L277 213"/><path d="M83 227H243L294 238"/>
+      <path d="M539 233H430L362 226"/><path d="M539 273H427L407 265"/>
+      <path d="M101 432H299L319 441"/><path d="M110 372H201L216 342"/>
+      </g><g fill="#29404c" font-size="17" font-weight="600">
+      <text x="7" y="185">Production casing</text><text x="7" y="233">Annulus</text>
+      <text x="548" y="237">Production tubing</text><text x="548" y="277">Aerated water top</text>
+      <text x="7" y="438">PCP pump</text><text x="7" y="378">Coal seams</text></g>
+      <g font-size="13" fill="#536773"><text x="7" y="458">Below the lower seam</text><text x="7" y="397">Gas + water inflow</text>
+      <text x="548" y="298">Gas bubbles expand the column</text><text x="548" y="254">Pumped water travels upward</text></g>
+      <path class="fa gas" d="M169 490H193"/><text x="203" y="494" font-size="13" fill="#00796f">Gas</text>
+      <path class="fa water" d="M254 490H278"/><text x="288" y="494" font-size="13" fill="#2467cc">Water</text>
+      </svg>
+    <div style="flex:1; display:flex; flex-direction:column; gap:18px">
+      <div style="background:#dcebf6; border-radius:16px; padding:22px 26px; display:flex; flex-direction:column; gap:6px">
+        <h3 style="font-size:28px; font-weight:700">Annulus water</h3>
+        <p style="font-size:23px; line-height:1.4">Water above the pump, aerated by the rising gas (drift flux, Shi et al. 2005), sets the pressure on the coal.</p>
+      </div>
+      <div style="background:#e0f8e2; border-radius:16px; padding:22px 26px; display:flex; flex-direction:column; gap:6px">
+        <h3 style="font-size:28px; font-weight:700">Pump and carryover</h3>
+        <p style="font-size:23px; line-height:1.4">A PCP on a variable-speed drive holds 50 ft of water. Fast gas carries water to the surface (Turner, load-corrected).</p>
+      </div>
+      <div style="background:#ffedd8; border-radius:16px; padding:22px 26px; display:flex; flex-direction:column; gap:6px">
+        <h3 style="font-size:28px; font-weight:700">Inside tNavigator</h3>
+        <p style="font-size:23px; line-height:1.4">Each step a Python script writes the well's VFP table from the annulus water. Tank and simulator agree on coal-face pressure to a median 0.14 psi over two years.</p>
+      </div>
+    </div>
+  </div>
+  <p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#7a8b9b">Well diagram: RFD tank-model slides · all results on synthetic demo models · equations in the backup</p>
+  <aside>The model is called the annulus tank model: 'tank' is the water inventory in the annulus, not a surface vessel. Per well: casing and tubing sizes, PCP displacement and slip, VSD limits 50 to 400 rpm, drift-flux gas holdup, Turner critical velocity with the Zhou and Yuan liquid-load correction, finite spill and a flowline delay for carried water. Coupling: APPLYSCRIPT writes a VFPPROD table per well (coal-face pressure against casing-head pressure and water rate, at the end-of-step water volume), so reservoir inflow and annulus filling are solved together; a network action passes pump and carried water to Network Designer. The native multisegment drift-flux option was tested first: in 26.2 its holdup did not change the wellbore pressure drop, so the tank model was built. Median mismatch 0.14 psi: a two-year run (730 days), 21 random pump stops.</aside>
+</section>
+</div>
+<div class="slide" data-id="stop" hidden>
+<section id="stop" data-transition="fade" style="background:#f7f9fb; color:#0a2a40; font-family:'Manrope', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:32px">
+  <div style="position:absolute; left:0; top:0; width:1920px; height:12px; background:linear-gradient(90deg, #12ace8, #0ab2bf, #0dcdab)"></div>
+  <div style="display:flex; flex-direction:column; gap:16px">
+    <p style="font-size:26px; font-weight:700; letter-spacing:3.6px; text-transform:uppercase; color:#0b7fa8">1 · Wellbore · what it shows</p>
+    <h2 style="font-size:60px; font-weight:800; letter-spacing:-1.2px; line-height:1.1">A 15-hour pump stop floods the annulus and chokes the gas</h2>
+  </div>
+  <div style="display:flex; gap:40px; align-items:start">
+    <img src="assets/4f7e33b132765d6b080201bcf2e827b3.png" alt="Well W3 around a 15-hour pump stop: pump speed, water height in the annulus, coal-face pressure from the tank model and the simulator, and gas and water rates" style="width:1180px; height:592px; object-fit:contain; border-radius:12px">
+    <div style="flex:1; display:flex; flex-direction:column; gap:22px">
+      <div style="background:#ffedd8; border-radius:16px; padding:26px; display:flex; flex-direction:column; gap:6px">
+        <p style="font-size:52px; font-weight:800; line-height:1">50 → 970 ft</p>
+        <p style="font-size:24px; line-height:1.4">water above the pump; coal face 52 → 403 psia; gas 1,200 → under 50 Mscf/d</p>
+      </div>
+      <div style="background:#dcebf6; border-radius:16px; padding:26px; display:flex; flex-direction:column; gap:6px">
+        <p style="font-size:52px; font-weight:800; line-height:1">~2 h</p>
+        <p style="font-size:24px; line-height:1.4">after the restart the level is back at 50 ft; the gas flushes to about 1,600 and settles near 1,250</p>
+      </div>
+      <p style="font-size:24px; line-height:1.45; color:#4a6378">Tank model and simulator agree on the coal-face pressure through the stop and the restart.</p>
+    </div>
+  </div>
+  <p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#7a8b9b">Synthetic well W3, day 95 of a two-year run with random pump stops · tank model · tNavigator</p>
+  <aside>W3 on day 95: the pump stops for 15 h. The clear-water height above the intake rises from 50 ft to about 970 ft and the coal-face pressure from 52 to 403 psia (the simulator's WBHP follows the tank model). The lower seam stops producing after about 2.5 h, when the wellbore pressure there exceeds the seam pressure; the upper seam keeps delivering a declining rate, so the gas falls from 1,200 to under 50 Mscf/d. Wellbore crossflow is switched off in this run: with a water-filled wellbore the lower seam cannot take gas back. On restart the VSD runs 240 rpm, the level is back at 50 ft within about 2 hours, the gas flushes to about 1,600 Mscf/d and settles near 1,250.</aside>
+</section>
+</div>
+<div class="slide" data-id="control" hidden>
+<section id="control" data-transition="fade" style="background:#f7f9fb; color:#0a2a40; font-family:'Manrope', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:32px">
+  <div style="position:absolute; left:0; top:0; width:1920px; height:12px; background:linear-gradient(90deg, #12ace8, #0ab2bf, #0dcdab)"></div>
+  <div style="display:flex; flex-direction:column; gap:16px">
+    <p style="font-size:26px; font-weight:700; letter-spacing:3.6px; text-transform:uppercase; color:#0b7fa8">1 · Integrated model (TC3)</p>
+    <h2 style="font-size:60px; font-weight:800; letter-spacing:-1.2px; line-height:1.1">A network controller holds the field target and evens out the wells</h2>
+  </div>
+  <div style="display:flex; gap:40px; align-items:start">
+    <img src="assets/5ec0c4aab6353df881b75b9c9baee6fc.png" alt="Field gas over one year with and without the controller against a 3,000 Mscf/d target; three wells shut on days 180 to 270" style="width:1180px; height:557px; object-fit:contain; border-radius:12px">
+    <div style="flex:1; display:flex; flex-direction:column; gap:22px">
+      <div style="background:#dcebf6; border-radius:16px; padding:26px; display:flex; flex-direction:column; gap:6px">
+        <p style="font-size:52px; font-weight:800; line-height:1">0.3%</p>
+        <p style="font-size:24px; line-height:1.4">mean deviation from 3,000 Mscf/d over the controlled stages</p>
+      </div>
+      <div style="background:#e0f8e2; border-radius:16px; padding:26px; display:flex; flex-direction:column; gap:6px">
+        <p style="font-size:52px; font-weight:800; line-height:1">11 → 1.25</p>
+        <p style="font-size:24px; line-height:1.4">highest to lowest well rate after balancing</p>
+      </div>
+      <p style="font-size:24px; line-height:1.45; color:#4a6378">When three wells shut, the rest take their share within days. The network solved on every day of the year.</p>
+    </div>
+  </div>
+  <p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#7a8b9b">Seven synthetic CBM wells with the tank model, one year · Network Designer · tNavigator</p>
+  <aside>The integrated case: one Network Designer Python action sets a common gas pressure and one choke pressure drop per well once a day. Stages: days 0-35 free, 35-60 target only, 60 onwards target plus balancing (min-max split of the target), W2/W4/W6 shut on days 180-270. Settled results: target 2,993-3,007 Mscf/d, highest/lowest well rate 11.1 before balancing, 1.25 with seven wells, 1.01 with four. Event days: +17% and +20% for one day, back on target in about four days. The controlled run: 0 network failures. Water carried up the annulus: 32 kbbl with the controller, 162 kbbl without.</aside>
+</section>
+</div>
+<div class="slide" data-id="scale" hidden>
+<section id="scale" data-transition="fade" style="background:#f7f9fb; color:#0a2a40; font-family:'Manrope', Arial, sans-serif; padding:112px 128px 150px; display:flex; flex-direction:column; gap:24px">
+  <div style="position:absolute; left:0; top:0; width:1920px; height:12px; background:linear-gradient(90deg, #12ace8, #0ab2bf, #0dcdab)"></div>
+  <div style="display:flex; flex-direction:column; gap:16px">
+    <p style="font-size:26px; font-weight:700; letter-spacing:3.6px; text-transform:uppercase; color:#0b7fa8">2 · Asset-scale network (TC4)</p>
+    <h2 style="font-size:60px; font-weight:800; letter-spacing:-1.2px; line-height:1.1">Gas networks from 7 to 7,000 wells, built by script</h2>
+  </div>
+  <img src="assets/5170853b00ef7ed49f8e5bcaed24f316.png" alt="Scheme of the 700-well network: ten compressor zones, each with pads of wells, gas gathering in orange and the water network in blue, to gas sales and two water plants" style="width:1664px; height:300px; object-fit:contain; border-radius:12px">
+  <table style="font-size:26px; color:#0a2a40; font-family:'Manrope', Arial, sans-serif">
+    <tr><th style="width:14%; text-align:left">Wells</th><th style="width:10%; text-align:right">Pads</th><th style="width:15%; text-align:right">Compressors</th><th style="width:21%; text-align:right">Gas target, MMscf/d</th><th style="width:18%; text-align:right">Time per date</th><th style="width:22%; text-align:right">Full run, 1 CPU</th></tr>
+    <tr><td>70</td><td style="text-align:right">20</td><td style="text-align:right">1</td><td style="text-align:right">30</td><td style="text-align:right">0.6 s</td><td style="text-align:right">99 s</td></tr>
+    <tr><td>700</td><td style="text-align:right">200</td><td style="text-align:right">10</td><td style="text-align:right">300</td><td style="text-align:right">7 s</td><td style="text-align:right">20 min</td></tr>
+    <tr><td>7,000</td><td style="text-align:right">2,000</td><td style="text-align:right">100</td><td style="text-align:right">3,000</td><td style="text-align:right">96 s</td><td style="text-align:right">~4.6 h</td></tr>
+    <tr style="color:#7a8b9b"><td>70,000</td><td style="text-align:right">20,000</td><td style="text-align:right">1,000</td><td style="text-align:right">30,000</td><td style="text-align:right">~20 min</td><td style="text-align:right">~2-3 days (estimate)</td></tr>
+  </table>
+  <p style="font-size:24px; line-height:1.45; color:#4a6378">Every run: 173 calculation dates over one year, 1 Sep 2026 to 1 Sep 2027 (daily around events, weekly to monthly between them). 7,000 wells: 107 of 173 dates in 2.8 h, the rest extrapolated. 70,000 wells: extrapolated from the growth 70 to 700 to 7,000, not run.</p>
+  <p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#7a8b9b">RFD demo networks · IPR wells in Python objects · Network Designer · tNavigator 26.2 · 700-well scheme after the water extension</p>
+  <aside>The networks were generated by script from seven base wells with fixed random seeds (productivity x0.77-1.25 per well, x0.87-1.14 per block, pressure potential x0.97-1.07), pads in star, branched and chained layouts, one compressor per 70 wells, delivery at 500 psia, the integrated model's controller (total target from day 35, balancing from day 60, W2/W4/W6 of every block shut on days 180-270). Checked on 28 September: the 7, 70 and 700-well projects re-run exactly to the delivered results (every controller line identical); targets held within 0.5% at the end of each stage. Calendar: 173 calculation dates from 1 Sep 2026 to 1 Sep 2027. Measured on one CPU: 70 wells 99 s, 700 wells 1,201 s; 7,000 wells 107 dates in 10,246 s (96 s per date on average), so about 4.6 h for the full year. Time grows about 12-14 times per 10 times more wells, so 70,000 wells would take about 20 min per date and 2-3 days per simulated year; that case was not built or run. More CPUs: see the multicore test on this slide. The picture is our re-laid-out scheme of the 700-well network with water added (next slides).</aside>
+</section>
+</div>
+<div class="slide" data-id="schedule" hidden>
+<section id="schedule" data-transition="fade" style="background:#f7f9fb; color:#0a2a40; font-family:'Manrope', Arial, sans-serif; padding:0">
+  <img src="assets/5237810deddd9a30a566476508b45ed5.png" alt="All four network demos follow the same control schedule: total gas target from day 35, rate balancing from day 60, selected wells shut in on days 180-270; 173 calculation dates over one year" style="position:absolute; left:0; top:0; width:1920px; height:1080px; object-fit:contain; background:#f7f9fb">
+  <aside>One control schedule for all network sizes: total gas target from day 35, balancing from day 60, W2/W4/W6 of every block shut in on days 180-270. Monthly calculation dates with daily windows around the events: 173 dates, 172 intervals, 1 Sep 2026 to 1 Sep 2027. Slide from the RFD gas-network slide set; since then the 7,000-well case has been run on the same calendar (previous slide).</aside>
+</section>
+</div>
+<div class="slide" data-id="ipr" hidden>
+<section id="ipr" data-transition="fade" style="background:#f7f9fb; color:#0a2a40; font-family:'Manrope', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:32px">
+  <div style="position:absolute; left:0; top:0; width:1920px; height:12px; background:linear-gradient(90deg, #12ace8, #0ab2bf, #0dcdab)"></div>
+  <div style="display:flex; flex-direction:column; gap:16px">
+    <p style="font-size:26px; font-weight:700; letter-spacing:3.6px; text-transform:uppercase; color:#0b7fa8">2 · Complex wells through simple IPRs</p>
+    <h2 style="font-size:60px; font-weight:800; letter-spacing:-1.2px; line-height:1.1">The network wells carry the integrated model's rates and decline</h2>
+  </div>
+  <div style="display:flex; gap:36px; align-items:start">
+    <div style="flex:1; display:flex; flex-direction:column; gap:14px">
+      <img src="assets/3d65b2079969aa223bd36229ac301cf1.png" alt="Gas rate at about 35 psia wellhead for seven well types: integrated model on day 60 against the fixed IPR of the network demo" style="width:810px; height:382px; object-fit:contain; border-radius:12px">
+      <p style="font-size:26px; line-height:1.45">Each IPR, q = C (P² − p²), is set from the integrated model: within 1-3% at peak for six of seven well types.</p>
+    </div>
+    <div style="flex:1; display:flex; flex-direction:column; gap:14px">
+      <img src="assets/2bb5ae5dd042bbfa453f01cb10877cf1.png" alt="Field gas of the 70-well network from day 50: constant IPR against IPR with decline, target 30,000 Mscf/d, three of seven wells shut on days 180-270" style="width:810px; height:382px; object-fit:contain; border-radius:12px">
+      <p style="font-size:26px; line-height:1.45">Under control both hold the 30,000 target. With the decline added as P(t) the plateau ends near day 330, as in the integrated model.</p>
+    </div>
+  </div>
+  <p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#7a8b9b">IPR in a Python object per well · decline P(t) from the integrated model's free run · 70-well network, target 30,000 Mscf/d</p>
+  <aside>Left: the network demo's base IPRs against the integrated model (no control) at about 35 psia wellhead on day 60: W1 1,040 vs 1,019, W3 1,274 vs 1,250, W5 1,715 vs 1,722, and so on. W2 is the exception (301 vs 159): in the integrated model W2 is weak through a low C, and C sits inside each Python object, which the workflow API cannot edit, so W2 keeps its level and gets only the decline shape. Right: the decline is added as the source pressure P(t) of every well, P(t)^2 = 35^2 + (P0^2 - 35^2) r(t), with r(t) from the integrated model's free run; the controller uses the same P(t). A daily calendar is needed (the delivered calendar is monthly between events). 70 wells: target held within 1% to about day 330, 26,781 Mscf/d on day 365. 700 wells: same shape, 266,974 on day 365.</aside>
+</section>
+</div>
+<div class="slide" data-id="water" hidden>
+<section id="water" data-transition="fade" style="background:#f7f9fb; color:#0a2a40; font-family:'Manrope', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:32px">
+  <div style="position:absolute; left:0; top:0; width:1920px; height:12px; background:linear-gradient(90deg, #12ace8, #0ab2bf, #0dcdab)"></div>
+  <div style="display:flex; flex-direction:column; gap:16px">
+    <p style="font-size:26px; font-weight:700; letter-spacing:3.6px; text-transform:uppercase; color:#0b7fa8">2 · Water</p>
+    <h2 style="font-size:60px; font-weight:800; letter-spacing:-1.2px; line-height:1.1">Water separated at every wellhead, gathered in a parallel network</h2>
+  </div>
+  <div style="display:flex; gap:40px; align-items:start">
+    <img src="assets/f2ddd7977d72027d992c0a926840e800.png" alt="Scheme of the 70-well network: two collector lines of pads, gas gathering in orange to the compressor and gas sales, the water network in blue running parallel to the water treatment plant" style="width:1200px; height:540px; object-fit:contain; border-radius:12px">
+    <div style="flex:1; display:flex; flex-direction:column; gap:20px">
+      <p style="font-size:26px; line-height:1.45">Each well's water follows its own water-to-gas ratio from the integrated model, high during dewatering and falling with time.</p>
+      <p style="font-size:26px; line-height:1.45">A separator on every wellhead sends the water through pad and collector lines, laid along the gas routes, to a treatment plant.</p>
+      <p style="font-size:24px; line-height:1.45; color:#4a6378">The scheme is laid out by collector line and zone, so the network reads on screen.</p>
+    </div>
+  </div>
+  <p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#7a8b9b">70-well network after the water extension · 70 wellhead separators · 1 treatment plant (700 wells: 700 separators, 2 plants)</p>
+  <aside>Water: each source gets a water-gas ratio WGR(t) per well type (stb/Mscf), chosen so that at 35 psia wellhead the water equals the integrated model's (no control) coal-water rate: about 57 bbl/Mscf on day 1, 0.8 on day 35, 0.2 by day 180. With a constant WGR per date, choking a well also cuts its water, which is the lever the optimiser uses. Network: a two-phase separator is inserted between each IPR object and its choke; its water outlet links to a pad water node; pad, collector and zone water lines mirror the gas gathering lines (same lengths), 6 to 10 inch, flat, Mukherjee-Brill; zone mains end at a plant inlet node and the plant sink at 20 psia. The 700-well network has two plants (zones 1-5 north, 6-10 south) and ten zone groups. Layout: collector lines as a fish-bone, pads above and below each line, the water line drawn parallel to the gas line.</aside>
+</section>
+</div>
+<div class="slide" data-id="wateropt" hidden>
+<section id="wateropt" data-transition="fade" style="background:#f7f9fb; color:#0a2a40; font-family:'Manrope', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:32px">
+  <div style="position:absolute; left:0; top:0; width:1920px; height:12px; background:linear-gradient(90deg, #12ace8, #0ab2bf, #0dcdab)"></div>
+  <div style="display:flex; flex-direction:column; gap:16px">
+    <p style="font-size:26px; font-weight:700; letter-spacing:3.6px; text-transform:uppercase; color:#0b7fa8">2 · Water-limited optimisation</p>
+    <h2 style="font-size:60px; font-weight:800; letter-spacing:-1.2px; line-height:1.1">The plant limit holds, and the gas comes from the driest wells first</h2>
+  </div>
+  <img src="assets/c829764946431128c0f313e451c85282.png" alt="70-well network over one year: field gas and water to the treatment plant, without a water limit and with a 20,000 bbl/d plant limit" style="width:1664px; height:600px; object-fit:contain; border-radius:12px">
+  <div style="display:flex; gap:24px">
+    <div style="flex:1; background:#ffedd8; border-radius:16px; padding:22px">
+      <p style="font-size:26px; line-height:1.4"><b>20,000 bbl/d</b> plant limit held from day 1 to day 45; unlimited peak 77,600</p>
+    </div>
+    <div style="flex:1; background:#dcebf6; border-radius:16px; padding:22px">
+      <p style="font-size:26px; line-height:1.4"><b>Day 45:</b> gas on the 30,000 target, water just under the limit</p>
+    </div>
+    <div style="flex:1; background:#ffffff; border:1px solid #d7dee5; border-radius:16px; padding:22px">
+      <p style="font-size:26px; line-height:1.4; color:#4a6378">Cost: 1,047 vs 1,794 MMscf gas in the first 60 days</p>
+      <p style="font-size:24px; line-height:1.45; color:#4a6378">Same at 700 wells with two plants (100,000 and 70,000 bbl/d): both limits held within 0.3%, target reached on day 49.</p>
+    </div>
+  </div>
+  <p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#7a8b9b">70-well network with decline and water · one Network Designer Python action · 366 daily steps</p>
+  <aside>Controller extension: each well's water is WGR x gas; each plant has a capacity. Allocation per date: q_i = min(qmax_i, L_gas, L_water / WGR_i). L_gas is the balancing level that meets the gas target; when a plant would exceed its capacity, a water level L_water caps the wettest wells first (their water is levelled), the drier wells keep L_gas, and L_gas rises to recover the target where the other wells and plants allow. While the plant binds the controller takes a full step (up to 200 psi a day on a choke) instead of the smooth 40% step. Result (70 wells, plant 20,000 bbl/d): water never more than 2% over the limit; without the limit water peaks at 77,600 bbl/d on day 20; with the limit the gas ramps slower and reaches the 30,000 Mscf/d target on day 45; after day 60 both runs are the same. Limitation: the decline is scheduled in time, so holding water back does not delay dewatering in this model; in a real coal it would. 700 wells, two plants (WTP_NORTH 100,000 and WTP_SOUTH 70,000 bbl/d): both limits held within 0.3%; without limits the plants would peak at about 391,000 and 385,000 bbl/d around day 20; the 300,000 Mscf/d target is reached on day 49; gas in the first 60 days 9,277 vs 17,439 MMscf; the same as the unlimited run after day 60.</aside>
+</section>
+</div>
+<div class="slide" data-id="aibuild" hidden>
+<section id="aibuild" data-transition="fade" style="background:#f7f9fb; color:#0a2a40; font-family:'Manrope', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:32px">
+  <div style="position:absolute; left:0; top:0; width:1920px; height:12px; background:linear-gradient(90deg, #12ace8, #0ab2bf, #0dcdab)"></div>
+  <div style="display:flex; flex-direction:column; gap:16px">
+    <p style="font-size:26px; font-weight:700; letter-spacing:3.6px; text-transform:uppercase; color:#0b7fa8">3 · AI layer · RFD demo</p>
+    <h2 style="font-size:60px; font-weight:800; letter-spacing:-1.2px; line-height:1.1">An AI agent builds an integrated model from plain requests</h2>
+  </div>
+  <div style="display:flex; gap:40px; align-items:start">
+    <video controls preload="metadata" playsinline muted poster="assets/228deeebbca77c64374c11d1aa5beb3d.jpg" src="assets/demo1.mp4" aria-label="Screen recording: an AI agent in a chat builds a reservoir model, well projects and a surface network in tNavigator" style="width:1120px; height:630px; object-fit:contain; border-radius:12px; background:#0a2a40"></video>
+    <div style="flex:1; display:flex; flex-direction:column; gap:20px">
+      <p style="font-size:26px; line-height:1.45">Request by request the agent creates PVT, relative permeability, equilibrium and two wells, then Well Designer projects and a Network Designer network.</p>
+      <p style="font-size:26px; line-height:1.45">It links them into one integrated case and runs it to 2028.</p>
+      <p style="font-size:24px; line-height:1.45; color:#4a6378">Claude Code driving tNavigator through the local MCP server. Silent clip, 4 min 20 s.</p>
+    </div>
+  </div>
+  <p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#7a8b9b">Demo 1 · IPS model · tNavigator 26.2 · RFD</p>
+  <aside>What the recording shows: a new Model Designer project; a PVT Designer black-oil variant (100 C, oil gravity 0.9, bubble point 300 bar); a Corey relative-permeability project (SWC 20%); equilibrium data (datum 1,500 m, GOC 1,500 m, WOC 1,580 m, 250 bar); a BHP-controlled case with 25 monthly steps; two Well Designer projects with casing and tubing; a THP-controlled case; a Network Designer project (two wells to a manifold through 500 m pipes, 10 km to a 40 bar sink); network timesteps synchronised; the integrated case IPS linked and run through 1/1/2028. The agent is Claude Code (Sonnet 5) using the tNavigator local MCP server. The clip in the deck is silent; the original with sound is kept with the project files.</aside>
+</section>
+</div>
+<div class="slide" data-id="aicalib" hidden>
+<section id="aicalib" data-transition="fade" style="background:#f7f9fb; color:#0a2a40; font-family:'Manrope', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:32px">
+  <div style="position:absolute; left:0; top:0; width:1920px; height:12px; background:linear-gradient(90deg, #12ace8, #0ab2bf, #0dcdab)"></div>
+  <div style="display:flex; flex-direction:column; gap:16px">
+    <p style="font-size:26px; font-weight:700; letter-spacing:3.6px; text-transform:uppercase; color:#0b7fa8">3 · AI layer · RFD demo</p>
+    <h2 style="font-size:60px; font-weight:800; letter-spacing:-1.2px; line-height:1.1">…and calibrates a well model to test data</h2>
+  </div>
+  <div style="display:flex; gap:40px; align-items:start">
+    <video controls preload="metadata" playsinline muted poster="assets/69c6f3829956f1a3e7403a47cee0b2f2.jpg" src="assets/demo2.mp4" aria-label="Screen recording: an AI agent builds a well model from a report, checks the well tests and matches the VFP to them" style="width:1120px; height:630px; object-fit:contain; border-radius:12px; background:#0a2a40"></video>
+    <div style="flex:1; display:flex; flex-direction:column; gap:20px">
+      <p style="font-size:26px; line-height:1.45">From a well report the agent builds the well and its fluid, screens the tests against two correlations and drops the one that fails.</p>
+      <div style="background:#e0f8e2; border-radius:16px; padding:24px; display:flex; flex-direction:column; gap:6px">
+        <p style="font-size:48px; font-weight:800; line-height:1">±1.5 bar</p>
+        <p style="font-size:24px; line-height:1.4">matched bottom-hole pressure; temperature within 0.13 °C</p>
+      </div>
+      <p style="font-size:24px; line-height:1.45; color:#4a6378">Silent clip, 2 min 47 s.</p>
+    </div>
+  </div>
+  <p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#7a8b9b">Demo 2 · well model · tNavigator 26.2 · RFD</p>
+  <aside>What the recording shows: a new project and well from a report (trajectory, casing, tubing, 107 C fluid, bubble point 213.1 bar, Standing correlations); the agent notices its temperature went in as Kelvin and fixes it; heat transfer enabled. Well-test QC: for each sample a well variant with Fancher-Brown and one with Beggs-Brill Revised; a sample passes when its measured BHP lies between the two. Sample 3 is 2.4 bar below both and is excluded. VFP matching on the remaining samples: friction multiplier 0.9772, hydrostatic multiplier 1.0090, matching error 2.614. Check with the matched VFP: BHP within about 1.5 bar, tubing-head temperature within 0.13 C. This is the calibration step the offer asks for in TC2 (matched VFP tables) done by an agent.</aside>
+</section>
+</div>
+<div class="slide" data-id="unsw" hidden>
+<section id="unsw" data-transition="fade" style="background:#f7f9fb; color:#0a2a40; font-family:'Manrope', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:32px">
+  <div style="position:absolute; left:0; top:0; width:1920px; height:12px; background:linear-gradient(90deg, #12ace8, #0ab2bf, #0dcdab)"></div>
+  <div style="display:flex; flex-direction:column; gap:16px">
+    <p style="font-size:26px; font-weight:700; letter-spacing:3.6px; text-transform:uppercase; color:#0b7fa8">4 · Proxy research (TC6) · UNSW</p>
+    <h2 style="font-size:60px; font-weight:800; letter-spacing:-1.2px; line-height:1.1">A graph neural network learns the wells of a tNavigator CSG model</h2>
+  </div>
+  <div style="display:flex; gap:40px; align-items:start">
+    <img src="assets/d3cd5cb8cbc315593415c2d79997ab35.png" alt="UNSW result: gas and water forecasts of two held-out wells from the AI proxy against the tNavigator simulation, from several forecast start months" style="width:1000px; height:620px; object-fit:contain; border-radius:12px; background:#ffffff">
+    <div style="flex:1; display:flex; flex-direction:column; gap:20px">
+      <p style="font-size:26px; line-height:1.45">Wells are nodes, neighbours are edges. Each well's gas and water profile is a sum of smooth basis functions.</p>
+      <div style="background:#dcebf6; border-radius:16px; padding:24px; display:flex; flex-direction:column; gap:6px">
+        <p style="font-size:48px; font-weight:800; line-height:1">2 s</p>
+        <p style="font-size:24px; line-height:1.4">forecast after about 2 minutes of training</p>
+      </div>
+      <p style="font-size:24px; line-height:1.45; color:#4a6378">Preliminary: 12-well test model, 240 months, two wells held out, no tuning yet.</p>
+    </div>
+  </div>
+  <p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#7a8b9b">UNSW MUTRIS group, tNav project update, 16 September 2026 · figure from their slides</p>
+  <aside>From the UNSW update (16 Sep 2026): project 'Modelling of coal seam gas reservoirs using tNavigator', started 7 August 2026. The test case is a tNavigator reservoir model with 12 wells simulated for 240 months. Node = a well with features (BHP, permeability, depth); edge = connection to an adjacent well (mean permeability, porosity, distance). Production profiles are approximated with 8 gas and 12 water basis functions. Preliminary result: training about 2 minutes, inference 2 seconds, two wells reserved for validation, no hyperparameter optimisation. The figure shows the forward forecasts of the two validation wells (13 and 15) against the simulator. Their next steps: more training data, a wider Surat-type parameter space, other well arrangements, Queensland Government water production data.</aside>
+</section>
+</div>
+<div class="slide" data-id="unswhow" hidden>
+<section id="unswhow" data-transition="fade" style="background:#f7f9fb; color:#0a2a40; font-family:'Manrope', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:32px">
+  <div style="position:absolute; left:0; top:0; width:1920px; height:12px; background:linear-gradient(90deg, #12ace8, #0ab2bf, #0dcdab)"></div>
+  <div style="display:flex; flex-direction:column; gap:16px">
+    <p style="font-size:26px; font-weight:700; letter-spacing:3.6px; text-transform:uppercase; color:#0b7fa8">4 · Proxy research · how it works</p>
+    <h2 style="font-size:60px; font-weight:800; letter-spacing:-1.2px; line-height:1.1">The proxy predicts a few coefficients per well, not a time series</h2>
+  </div>
+  <div style="display:flex; gap:40px; align-items:start">
+    <div style="width:760px; flex:none; display:flex; flex-direction:column; gap:16px">
+      <div style="background:#dcebf6; border-radius:16px; padding:22px 26px; display:flex; gap:20px; align-items:start">
+        <p style="font-size:40px; font-weight:800; line-height:1; color:#0e4765; flex:none; width:40px">1</p>
+        <div style="display:flex; flex-direction:column; gap:6px">
+          <h3 style="font-size:28px; font-weight:700">Wells as a graph</h3>
+          <p style="font-size:23px; line-height:1.4">Node = a well: BHP, permeability, depth. Edge = a neighbour: mean permeability, porosity, distance. Static inputs from the tNavigator model, plus each well's production history.</p>
+        </div>
+      </div>
+      <div style="background:#e0f8e2; border-radius:16px; padding:22px 26px; display:flex; gap:20px; align-items:start">
+        <p style="font-size:40px; font-weight:800; line-height:1; color:#0e4765; flex:none; width:40px">2</p>
+        <div style="display:flex; flex-direction:column; gap:6px">
+          <h3 style="font-size:28px; font-weight:700">Graph neural network</h3>
+          <p style="font-size:23px; line-height:1.4">Graph convolutions pass information between neighbouring wells, so interference is learned from the layout.</p>
+        </div>
+      </div>
+      <div style="background:#ffedd8; border-radius:16px; padding:22px 26px; display:flex; gap:20px; align-items:start">
+        <p style="font-size:40px; font-weight:800; line-height:1; color:#0e4765; flex:none; width:40px">3</p>
+        <div style="display:flex; flex-direction:column; gap:6px">
+          <h3 style="font-size:28px; font-weight:700">8 + 12 coefficients per well</h3>
+          <p style="font-size:23px; line-height:1.4">Output: weights of 8 gas and 12 water basis functions (right). Their sum is a smooth 240-month gas and water profile.</p>
+        </div>
+      </div>
+    </div>
+    <div style="flex:1; display:flex; flex-direction:column; gap:14px">
+      <img src="assets/0e7637d59d8a8edf6b965352a4e9d9c1.png" alt="UNSW basis functions over 240 months: 8 broad overlapping gas curves and 12 tighter water curves" style="width:864px; height:489px; object-fit:contain; border-radius:12px; background:#ffffff">
+      <p style="font-size:23px; line-height:1.45; color:#4a6378">Trained on tNavigator runs: 12 wells, 240 months, 2 wells held out for validation. Training about 2 minutes, a forecast in 2 seconds.</p>
+    </div>
+  </div>
+  <p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#7a8b9b">UNSW MUTRIS group, tNav project update, 16 September 2026 · basis-function figure from their slides</p>
+  <aside>From the UNSW update of 16 September 2026, slides 5-9. Approach: each well is a node with features (BHP, permeability, depth); edges connect adjacent wells and carry features (mean permeability, porosity, distance); the static inputs are the topology of the tNavigator test model, the dynamic inputs its production history. The network outputs coefficients Kg (8 gas) and Kw (12 water) of fixed basis functions; together with the basis functions they give smooth production profiles, which keeps the output small and the forecast stable. Test case: a tNavigator reservoir model with 12 wells simulated for 240 months. Preliminary: 2 wells reserved for validation, no hyperparameter optimisation, training about 2 minutes, inference 2 seconds. Next steps they list: more training data, a wider Surat-type parameter space, different well arrangements, Queensland Government water production data.</aside>
+</section>
+</div>
+<div class="slide" data-id="unswprop" hidden>
+<section id="unswprop" data-transition="fade" style="background:#f7f9fb; color:#0a2a40; font-family:'Manrope', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:44px">
+  <div style="position:absolute; left:0; top:0; width:1920px; height:12px; background:linear-gradient(90deg, #12ace8, #0ab2bf, #0dcdab)"></div>
+  <div style="display:flex; flex-direction:column; gap:16px">
+    <p style="font-size:26px; font-weight:700; letter-spacing:3.6px; text-transform:uppercase; color:#0b7fa8">4 · UNSW proposal</p>
+    <h2 style="font-size:60px; font-weight:800; letter-spacing:-1.2px; line-height:1.1">A control-aware proxy for the reservoir, with tNavigator still solving the network</h2>
+  </div>
+  <div style="display:flex; gap:32px">
+    <div style="flex:1; display:flex; flex-direction:column; gap:14px; background:#dcebf6; border-radius:20px; padding:36px">
+      <h3 style="font-size:32px; font-weight:700">Why</h3>
+      <p style="font-size:26px; line-height:1.45">At low gathering pressure a choke change moves the whole network at once and the coal later. A coupled run is too slow to try many settings.</p>
+    </div>
+    <div style="flex:1; display:flex; flex-direction:column; gap:14px; background:#e0f8e2; border-radius:20px; padding:36px">
+      <h3 style="font-size:32px; font-weight:700">What</h3>
+      <p style="font-size:26px; line-height:1.45">A graph network replaces the reservoir grid: wells are nodes, edges join wells whose drainage areas touch. The surface network stays in tNavigator.</p>
+    </div>
+    <div style="flex:1; display:flex; flex-direction:column; gap:14px; background:#ffedd8; border-radius:20px; padding:36px">
+      <h3 style="font-size:32px; font-weight:700">Open questions</h3>
+      <p style="font-size:26px; line-height:1.45">Does it handle events it has not seen, like a pump stop? Does it run on a field where wells were added or shut in, without retraining?</p>
+    </div>
+  </div>
+  <p style="font-size:28px; line-height:1.45; color:#4a6378; width:1560px">It receives the planned controls with the history and forecasts gas and water per well for the coming months. It is trained on runs with varied control schedules, the kind our integrated models produce.</p>
+  <p style="position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#7a8b9b">UNSW-RFD problem statement: a control-aware AI-based subsurface proxy for coupled reservoir and surface-network simulation in CBM</p>
+  <aside>From the UNSW-RFD problem statement. Architecture: a spatiotemporal graph neural network; each well a node; subsurface edges between wells whose Voronoi drainage areas share a boundary; no surface edges, because tNavigator resolves the pipe network implicitly and the proxy only learns the subsurface response; a recurrent encoder per node for production histories. Control-aware: it receives the control settings, including those planned for the forecast period; unplanned events such as a pump shutdown are treated as a control change that has just happened. Static properties, seismic, geology and drainage volumes can be fed into nodes and edges, which leaves room for stress- and desorption-driven permeability change. This matches the offer's TC6 architecture 2 (subsurface proxy feeding a physical network solve).</aside>
+</section>
+</div>
+<div class="slide" data-id="chain" hidden>
+<section id="chain" data-transition="fade" style="background:#0e4765; color:#ffffff; font-family:'Manrope', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+  <div style="position:absolute; left:0; bottom:0; width:1920px; height:16px; background:linear-gradient(90deg, #12ace8, #0ab2bf, #0dcdab)"></div>
+  <div style="display:flex; flex-direction:column; gap:16px">
+    <p style="font-size:26px; font-weight:700; letter-spacing:3.6px; text-transform:uppercase; color:#7fdceb">One chain</p>
+    <h2 style="font-size:64px; font-weight:800; letter-spacing:-1.2px; line-height:1.1">Physics in the well, scale in the network, speed from AI</h2>
+  </div>
+  <div style="display:flex; gap:24px; align-items:stretch">
+    <div style="flex:1; display:flex; flex-direction:column; gap:12px; background:#0a2a40; border-radius:20px; padding:32px">
+      <p style="font-size:24px; font-weight:700; color:#7fdceb">WELL</p>
+      <p style="font-size:26px; line-height:1.4">Annulus water and the pump set the coal-face pressure</p>
+    </div>
+    <div style="flex:1; display:flex; flex-direction:column; gap:12px; background:#0a2a40; border-radius:20px; padding:32px">
+      <p style="font-size:24px; font-weight:700; color:#7fdceb">IPR</p>
+      <p style="font-size:26px; line-height:1.4">Its rates and decline go into simple well curves</p>
+    </div>
+    <div style="flex:1; display:flex; flex-direction:column; gap:12px; background:#0a2a40; border-radius:20px; padding:32px">
+      <p style="font-size:24px; font-weight:700; color:#7fdceb">NETWORK</p>
+      <p style="font-size:26px; line-height:1.4">Thousands of wells, gas and water, limits and control</p>
+    </div>
+    <div style="flex:1; display:flex; flex-direction:column; gap:12px; background:#0a2a40; border-radius:20px; padding:32px">
+      <p style="font-size:24px; font-weight:700; color:#7fdceb">PROXY + AI</p>
+      <p style="font-size:26px; line-height:1.4">Faster forecasts; agents build and calibrate</p>
+    </div>
+  </div>
+  <div style="display:flex; flex-direction:column; gap:14px">
+    <p style="font-size:30px; font-weight:700">Next, with Origin data</p>
+    <p style="font-size:28px; line-height:1.45; color:#c9dfec">Data stress test and pilot sector · BHP reconstruction on gauge wells · Gangi closure with ensemble history matching · Origin network topology at full scale · UNSW proxy trained on our integrated runs</p>
+  </div>
+  <aside>Summary of the story. Well (TC2): the annulus tank model gives the coal-face pressure that a static VFP cannot, including pump stops. IPR (TC4 bridge): its rates and decline are carried into the IPRs of the asset-scale network, which keeps a thousands-of-wells network fast. Network (TC3/TC4): gas and water, facility limits and control, built by script. Proxy and AI (TC6, section 8): UNSW's graph proxy for faster forecasts; AI agents that build and calibrate models. Next steps follow the offer's menu: data stress test first; TC2 BHP reconstruction on 3-5 gauge wells; TC1 Gangi closure plus ensemble AHM; TC4 on Origin's real topology; TC6 proxy trained on integrated runs with varied control schedules.</aside>
+</section>
+</div>
+<div class="slide" data-id="backup" hidden>
+<section id="backup" data-transition="fade" style="background:#0e4765; color:#ffffff; font-family:'Manrope', Arial, sans-serif; padding:128px; display:flex; flex-direction:column; justify-content:center; gap:28px">
+  <div style="position:absolute; left:0; bottom:0; width:1920px; height:12px; background:linear-gradient(90deg, #12ace8, #0ab2bf, #0dcdab)"></div>
+  <p style="font-size:26px; font-weight:700; letter-spacing:3.6px; text-transform:uppercase; color:#7fdceb">Backup</p>
+  <h2 style="font-size:72px; font-weight:800; letter-spacing:-1.4px; line-height:1.1">Model equations and network demo details</h2>
+  <p style="font-size:30px; line-height:1.45; color:#dcebf6; max-width:1300px">The annulus tank model (water inventory, drift flux, pump, carryover, delays, VFP coupling) and the gas-network demo (IPR wells, compressors, controller).</p>
+  <aside>Backup slides from the RFD tank-model and gas-network slide set: equations and parameters behind sections 1 and 2.</aside>
+</section>
+</div>
+<div class="slide" data-id="bk02" hidden>
+<section id="bk02" data-transition="fade" style="background:#f7f9fb; color:#0a2a40; font-family:'Manrope', Arial, sans-serif; padding:0">
+  <img src="assets/d3b6626fa06da1b1564397acf2ff94cc.png" alt="Backup: Water inventory sets the pressure at the coal" style="position:absolute; left:0; top:0; width:1920px; height:1080px; object-fit:contain; background:#f7f9fb">
+  <aside>Backup: Water inventory sets the pressure at the coal. Slide from the RFD tank-model and gas-network slide set.</aside>
+</section>
+</div>
+<div class="slide" data-id="bk03" hidden>
+<section id="bk03" data-transition="fade" style="background:#f7f9fb; color:#0a2a40; font-family:'Manrope', Arial, sans-serif; padding:0">
+  <img src="assets/2201f00ef87cd7f2fd5fa2fbc09fed83.png" alt="Backup: Drift flux turns gas rate into liquid holdup" style="position:absolute; left:0; top:0; width:1920px; height:1080px; object-fit:contain; background:#f7f9fb">
+  <aside>Backup: Drift flux turns gas rate into liquid holdup. Slide from the RFD tank-model and gas-network slide set.</aside>
+</section>
+</div>
+<div class="slide" data-id="bk04" hidden>
+<section id="bk04" data-transition="fade" style="background:#f7f9fb; color:#0a2a40; font-family:'Manrope', Arial, sans-serif; padding:0">
+  <img src="assets/57b8ffcc30a6bfa9398d0d6a57468a3d.png" alt="Backup: The PCP lifts water; the VSD controls inventory" style="position:absolute; left:0; top:0; width:1920px; height:1080px; object-fit:contain; background:#f7f9fb">
+  <aside>Backup: The PCP lifts water; the VSD controls inventory. Slide from the RFD tank-model and gas-network slide set.</aside>
+</section>
+</div>
+<div class="slide" data-id="bk05" hidden>
+<section id="bk05" data-transition="fade" style="background:#f7f9fb; color:#0a2a40; font-family:'Manrope', Arial, sans-serif; padding:0">
+  <img src="assets/a7c7e3fb5de42c778e143c7c74d7159e.png" alt="Backup: Gas can bypass the pump and carry water upward" style="position:absolute; left:0; top:0; width:1920px; height:1080px; object-fit:contain; background:#f7f9fb">
+  <aside>Backup: Gas can bypass the pump and carry water upward. Slide from the RFD tank-model and gas-network slide set.</aside>
+</section>
+</div>
+<div class="slide" data-id="bk06" hidden>
+<section id="bk06" data-transition="fade" style="background:#f7f9fb; color:#0a2a40; font-family:'Manrope', Arial, sans-serif; padding:0">
+  <img src="assets/b93c2221b3596da517e36c45de527b2f.png" alt="Backup: Water removal and delivery take time" style="position:absolute; left:0; top:0; width:1920px; height:1080px; object-fit:contain; background:#f7f9fb">
+  <aside>Backup: Water removal and delivery take time. Slide from the RFD tank-model and gas-network slide set.</aside>
+</section>
+</div>
+<div class="slide" data-id="bk07" hidden>
+<section id="bk07" data-transition="fade" style="background:#f7f9fb; color:#0a2a40; font-family:'Manrope', Arial, sans-serif; padding:0">
+  <img src="assets/30ccb28b71a90129423141e236a37913.png" alt="Backup: A VFP table connects the well model to tNavigator" style="position:absolute; left:0; top:0; width:1920px; height:1080px; object-fit:contain; background:#f7f9fb">
+  <aside>Backup: A VFP table connects the well model to tNavigator. Slide from the RFD tank-model and gas-network slide set.</aside>
+</section>
+</div>
+<div class="slide" data-id="bk08" hidden>
+<section id="bk08" data-transition="fade" style="background:#f7f9fb; color:#0a2a40; font-family:'Manrope', Arial, sans-serif; padding:0">
+  <img src="assets/22387de00fb4f0383032fd73f6bf8551.png" alt="Backup: Fixed IPRs define the gas wells" style="position:absolute; left:0; top:0; width:1920px; height:1080px; object-fit:contain; background:#f7f9fb">
+  <aside>Backup: Fixed IPRs define the gas wells. Slide from the RFD tank-model and gas-network slide set.</aside>
+</section>
+</div>
+<div class="slide" data-id="bk09" hidden>
+<section id="bk09" data-transition="fade" style="background:#f7f9fb; color:#0a2a40; font-family:'Manrope', Arial, sans-serif; padding:0">
+  <img src="assets/4540302d80c0b982c54940e62e737bc0.png" alt="Backup: Fixed IPRs for seven gas wells" style="position:absolute; left:0; top:0; width:1920px; height:1080px; object-fit:contain; background:#f7f9fb">
+  <aside>Backup: Fixed IPRs for seven gas wells. Slide from the RFD tank-model and gas-network slide set.</aside>
+</section>
+</div>
+<div class="slide" data-id="bk10" hidden>
+<section id="bk10" data-transition="fade" style="background:#f7f9fb; color:#0a2a40; font-family:'Manrope', Arial, sans-serif; padding:0">
+  <img src="assets/715753d706a53fcffc7ced65cabde40c.png" alt="Backup: Compressors offset pressure losses in the network" style="position:absolute; left:0; top:0; width:1920px; height:1080px; object-fit:contain; background:#f7f9fb">
+  <aside>Backup: Compressors offset pressure losses in the network. Slide from the RFD tank-model and gas-network slide set.</aside>
+</section>
+</div>
+<div class="slide" data-id="bk11" hidden>
+<section id="bk11" data-transition="fade" style="background:#f7f9fb; color:#0a2a40; font-family:'Manrope', Arial, sans-serif; padding:0">
+  <img src="assets/8ada5872629684a28b5b82d3c4f7f6ac.png" alt="Backup: Control total gas and balance well rates" style="position:absolute; left:0; top:0; width:1920px; height:1080px; object-fit:contain; background:#f7f9fb">
+  <aside>Backup: Control total gas and balance well rates. Slide from the RFD tank-model and gas-network slide set.</aside>
+</section>
+</div>
+</div></div>
+<div class="zone" id="zl" title="Previous slide"></div><div class="zone" id="zr" title="Next slide"></div>
+<div id="ui"><button id="prev" aria-label="Previous slide">&#8592;</button><span id="count"></span><button id="next" aria-label="Next slide">&#8594;</button><button id="nt" aria-label="Toggle speaker notes">Notes</button></div>
+<div id="help">Arrows or space to move, N for notes</div>
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide')), n=slides.length, cur=0;
+  var stage=document.getElementById('stage');
+  function fit(){
+    var s=Math.min(window.innerWidth/1920, window.innerHeight/1080);
+    stage.style.transform='translate('+((window.innerWidth-1920*s)/2)+'px,'+((window.innerHeight-1080*s)/2)+'px) scale('+s+')';
+  }
+  function show(i, push){
+    i=Math.max(0,Math.min(n-1,i));
+    slides[cur].hidden=true;
+    [].forEach.call(slides[cur].querySelectorAll('video'),function(v){v.pause();});
+    cur=i; slides[cur].hidden=false;
+    document.getElementById('count').textContent=(cur+1)+' / '+n;
+    if(push!==false && location.hash!=='#'+(cur+1)) history.replaceState(null,'','#'+(cur+1));
+  }
+  function fromHash(){var k=parseInt((location.hash||'').slice(1),10); show(isNaN(k)?0:k-1,false);}
+  document.addEventListener('keydown',function(e){
+    if(e.target.tagName==='VIDEO' && (e.key==='ArrowLeft'||e.key==='ArrowRight'||e.key===' ')) return;
+    if(['ArrowRight','ArrowDown','PageDown',' ','Enter'].indexOf(e.key)>=0){e.preventDefault();show(cur+1);}
+    else if(['ArrowLeft','ArrowUp','PageUp','Backspace'].indexOf(e.key)>=0){e.preventDefault();show(cur-1);}
+    else if(e.key==='Home'){show(0);} else if(e.key==='End'){show(n-1);}
+    else if(e.key==='n'||e.key==='N'){document.body.classList.toggle('notes');}
+  });
+  document.getElementById('prev').onclick=function(){show(cur-1);};
+  document.getElementById('next').onclick=function(){show(cur+1);};
+  document.getElementById('nt').onclick=function(){document.body.classList.toggle('notes');};
+  document.getElementById('zl').onclick=function(){show(cur-1);};
+  document.getElementById('zr').onclick=function(){show(cur+1);};
+  var x0=null,y0=null;
+  document.addEventListener('touchstart',function(e){document.body.classList.add('touch');x0=e.touches[0].clientX;y0=e.touches[0].clientY;},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(x0===null)return; var dx=e.changedTouches[0].clientX-x0, dy=e.changedTouches[0].clientY-y0;
+    if(e.target.tagName!=='VIDEO' && Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)) show(cur+(dx<0?1:-1)); x0=null;
+  },{passive:true});
+  var idle; function wake(){document.body.classList.remove('idle'); clearTimeout(idle); idle=setTimeout(function(){document.body.classList.add('idle');},2500);}
+  ['mousemove','keydown','touchstart'].forEach(function(t){document.addEventListener(t,wake,{passive:true});}); wake();
+  window.addEventListener('resize',fit); window.addEventListener('hashchange',fromHash);
+  fit(); fromHash();
+})();
+</script>
+</body>
+</html>
